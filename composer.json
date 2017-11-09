@@ -1,0 +1,21 @@
+{
+  "name": "cosmologist/symfony-common-bundle",
+  "type": "symfony-bundle",
+  "description": "Useful features for Symfony, Doctrine, Twig etc.",
+  "keywords": [
+    "symfony",
+    "twig",
+    "doctrine",
+    "php",
+    "bundle"
+  ],
+  "license": "MIT",
+  "require": {
+    "php": ">=5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Cosmologist\\Bundle\\SymfonyCommonBundle\\": ""
+    }
+  }
+}

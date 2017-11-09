@@ -1,0 +1,9 @@
+services:
+
+  symfony_common.twig.php_extension:
+      class: Cosmologist\Bundle\SymfonyCommonBundle\Twig\PhpExtension
+      arguments:
+        - %twig_php.functions%
+        - %twig_php.filters%
+      tags:
+          - { name: twig.extension }
