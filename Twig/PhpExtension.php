@@ -92,6 +92,6 @@ class PhpExtension extends Twig_Extension
      */
     public function getName()
     {
-        return 'cosmologist_twig_php_extension';
+        return 'symfony_common_php_extension';
     }
 }

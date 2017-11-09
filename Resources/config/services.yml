@@ -1,9 +1,14 @@
 services:
 
+  symfony_common.twig.common_extension:
+      class: Cosmologist\Bundle\SymfonyCommonBundle\Twig\CommonExtension
+      tags:
+          - { name: twig.extension }
+
   symfony_common.twig.php_extension:
       class: Cosmologist\Bundle\SymfonyCommonBundle\Twig\PhpExtension
       arguments:
-        - %twig_php.functions%
-        - %twig_php.filters%
+        - '%symfony_common.twig.php_extension.functions%'
+        - '%symfony_common.twig.php_extension.filters%'
       tags:
           - { name: twig.extension }
