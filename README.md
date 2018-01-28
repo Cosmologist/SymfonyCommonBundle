@@ -52,4 +52,4 @@ Run dumper:
 php app/console symfony-common:external-config:dump superbackup backup.yml.twig --env=prod --no-debug
 ```
 
-And config should be dumped to app/cache/prod/external_config/backup.yml (without *.twig* extension)
+And config should be dumped to *app/cache/prod/external_config/backup.yml* (without *.twig* extension)
