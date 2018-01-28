@@ -25,7 +25,7 @@ Useful when you want to deduplicate application parameters (like db-connections,
 Configuration for abstract backup-system
 
 Configuration file template:
-```
+```yaml
 # app/config/external/dist/backup.yml.twig
 backup:
     mysql:
@@ -37,7 +37,8 @@ backup:
 ```
 
 Twig globals configuration:
-```
+```yaml
+# app/config/config.yml
 twig:
     globals:
         superbackup:
