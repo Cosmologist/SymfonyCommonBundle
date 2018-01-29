@@ -21,6 +21,8 @@ class SymfonyCommonExtension extends Extension
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
+        $container->setParameter('symfony_common.external_config', $config['external_config']);
+
         $container->setParameter('symfony_common.twig.php_extension.filters', $config['twig']['php_extension']['filters']);
         $container->setParameter('symfony_common.twig.php_extension.functions', $config['twig']['php_extension']['functions']);
     }

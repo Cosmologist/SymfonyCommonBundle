@@ -46,12 +46,13 @@ class DumpExternalConfigCommand extends ContainerAwareCommand
         $appDir   = $this->getContainer()->getParameter('kernel.root_dir');
         $cacheDir = $this->getContainer()->getParameter('kernel.cache_dir');
 
-        $globals = $twig->getGlobals();
-        if (!isset($globals[self::TWIG_GLOBALS_CONFIG_SECTION][$name])) {
-            throw new RuntimeException("Define external config parameters at 'twig.globals.$name' in the application config.yml");
+        $allParameters = $this->getContainer()->getParameter('symfony_common.external_config');
+
+        if (!isset($allParameters[$name])) {
+            throw new RuntimeException("Define external config parameters at 'symfony_common.external_config.$name' in the application config.yml");
         }
 
-        $parameters = $globals[self::TWIG_GLOBALS_CONFIG_SECTION][$name];
+        $parameters = $allParameters[$name];
         if (!is_array($parameters) || !ArrayType::checkAssoc($parameters)) {
             throw new RuntimeException("Parameters for '$name' external config should be defined as assoc array");
         }

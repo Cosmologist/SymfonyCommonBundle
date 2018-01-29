@@ -36,11 +36,11 @@ backup:
     sync-to: amazon-s3
 ```
 
-Twig globals configuration:
+Define parameters for dist:
 ```yaml
 # app/config/config.yml
-twig:
-    globals:
+symfony_common:
+    external_config:
         superbackup:
             name: '%doctrine.connection.default.database_name%'
             user: '%doctrine.connection.default.database_user%'

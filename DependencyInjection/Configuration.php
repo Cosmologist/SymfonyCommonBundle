@@ -21,6 +21,12 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->arrayNode('external_config')
+                    ->prototype('array')
+                        ->prototype('variable')->end()
+                    ->end()
+                ->end()
+
                 ->arrayNode('twig')
                     ->children()
                         ->arrayNode('php_extension')
