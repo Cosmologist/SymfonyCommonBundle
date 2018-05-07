@@ -2,7 +2,10 @@
 
 namespace Cosmologist\Bundle\SymfonyCommonBundle\DependencyInjection;
 
+use AppCache;
+use RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Static access to the service container
@@ -18,7 +21,14 @@ class ContainerStatic
     {
         global $kernel;
 
-        return $kernel->getContainer();
+        if ($kernel instanceof KernelInterface) {
+            return $kernel->getContainer();
+        }
+        if ($kernel instanceof AppCache) {
+            return $kernel->getKernel()->getContainer();
+        }
+
+        throw new RuntimeException('Unsupported kernel (supports KernelInterface of AppCache): ' . get_class($kernel));
     }
 
     /**
