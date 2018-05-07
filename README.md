@@ -18,6 +18,15 @@ symfony_common:
           - time # register php "time" function as twig "time" function
 ```
 
+## Static access to the service container
+```php
+use Cosmologist\Bundle\SymfonyCommonBundle\DependencyInjection\ContainerStatic;
+
+ContainerStatic::getContainer();
+ContainerStatic::get('serivice_id');
+ContainerStatic::getParameter('parameter_id');
+```
+
 ## Dump configuration files for external related applications
 Useful when you want to deduplicate application parameters (like db-connections, paths etc) and store related external applications configurations (backup-systems, crontab etc) inside the project.
 
