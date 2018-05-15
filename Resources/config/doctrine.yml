@@ -1,0 +1,6 @@
+services:
+
+  symfony_common.doctrine.utils:
+    class: Cosmologist\Bundle\SymfonyCommonBundle\Doctrine\DoctrineUtils
+    arguments:
+      - '@doctrine'

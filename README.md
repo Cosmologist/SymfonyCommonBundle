@@ -17,6 +17,27 @@ symfony_common:
       functions:
           - time # register php "time" function as twig "time" function
 ```
+## Doctrine utils
+Get Doctrine utils
+```php
+$utils = $container->get('symfony_common.doctrine.utils');
+```
+
+Simple way to get doctrine entity metadata
+```php
+$utils->getClassMetadata($entity);
+$utils->getClassMetadata(Entity::class);
+```
+
+Get entity identifier field name (does not support multiple identifiers - throws DoctrineUtilsException)
+```php
+$utils->getEntitySingleIdentifierField($entity);
+$utils->getEntitySingleIdentifierField(Entity::class);
+```
+Get entity identifier value (does not support multiple identifiers - throws DoctrineUtilsException)
+```php
+$utils->getEntitySingleIdentifierValue($entity);
+```
 
 ## Static access to the service container
 ```php
