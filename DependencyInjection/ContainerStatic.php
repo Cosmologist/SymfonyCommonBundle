@@ -13,22 +13,30 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class ContainerStatic
 {
     /**
-     * Gets the current container.
+     * Instance of container.
      *
-     * @return ContainerInterface A ContainerInterface instance
+     * @var null|ContainerInterface
      */
-    static function getContainer(): ContainerInterface
+    protected static $container = null;
+
+    /**
+     * Set the service container.
+     *
+     * @param ContainerInterface The service container
+     */
+    static function setContainer(ContainerInterface $container)
     {
-        global $kernel;
+        self::$container = $container;
+    }
 
-        if ($kernel instanceof KernelInterface) {
-            return $kernel->getContainer();
-        }
-        if ($kernel instanceof AppCache) {
-            return $kernel->getKernel()->getContainer();
-        }
-
-        throw new RuntimeException('Unsupported kernel (supports KernelInterface of AppCache): ' . get_class($kernel));
+    /**
+     * Returns the service container.
+     *
+     * @return ContainerInterface|null The service container
+     */
+    static function getContainer(): ?ContainerInterface
+    {
+        return self::$container;
     }
 
     /**
@@ -46,7 +54,7 @@ class ContainerStatic
      */
     static function get(string $id)
     {
-        return self::getContainer()->get($id);
+        return self::$container->get($id);
     }
 
     /**
@@ -60,6 +68,6 @@ class ContainerStatic
      */
     static function getParameter(string $name)
     {
-        return self::getContainer()->getParameter($name);
+        return self::$container->getParameter($name);
     }
 }
