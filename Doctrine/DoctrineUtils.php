@@ -58,6 +58,10 @@ class DoctrineUtils
      */
     public function getEntitySingleIdentifierField($entity)
     {
+        if (null === $entity) {
+            return null;
+        }
+
         $metadata             = $this->getClassMetadata($entity);
         $identifierFieldNames = $metadata->getIdentifierFieldNames();
 
@@ -79,6 +83,10 @@ class DoctrineUtils
      */
     public function getEntitySingleIdentifierValue($entity)
     {
+        if (null === $entity) {
+            return null;
+        }
+
         $metadata    = $this->getClassMetadata($entity);
         $identifiers = $metadata->getIdentifierValues($entity);
 
