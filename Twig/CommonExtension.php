@@ -54,7 +54,7 @@ class CommonExtension extends Twig_Extension
                         break;
                 }
             } else {
-                return $attrName . '="' . $attrVal . '"';
+                return $attrName . '="' . htmlspecialchars($attrVal, ENT_COMPAT) . '"';
             }
 
             return $attrName . '=' . $quote . $attrVal . $quote;
