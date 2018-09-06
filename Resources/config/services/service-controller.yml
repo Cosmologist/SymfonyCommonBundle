@@ -1,0 +1,7 @@
+services:
+
+  symfony_common.controller.service_controller:
+      class: Cosmologist\Bundle\SymfonyCommonBundle\Controller\ServiceController
+      arguments:
+        - '@service_container'
+        - '@doctrine'

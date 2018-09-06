@@ -39,6 +39,25 @@ Get entity identifier value (does not support multiple identifiers - throws Doct
 $utils->getEntitySingleIdentifierValue($entity);
 ```
 
+## Service controller
+Calls DI services via HTTP.
+  
+Send POST-request to specified URL like this:
+```example.com/admin/service/appbundle.service.processor/process```  
+where *appbundle.service.processor* is service name and *process* is name of method.  
+The method arguments must be passed as POST-parameters.  
+If the service expects the entity as argument (type-hint exists) - pass the entity identifier instead, the suitable entity will be loaded automatically (Doctrine is used, but you can use the custom loader in the future).
+
+Don't forget to include the routing-file to enable the controller:
+```
+# app/config/routing.yml
+admin.service:
+    resource: "@SymfonyCommonBundle/Resources/config/routing.yml"
+    prefix:   /admin
+```
+
+**Caution**: Use security [access_control](https://symfony.com/doc/current/security/access_control.html) option to restrict access to the service controller.
+
 ## Static access to the service container
 ```php
 use Cosmologist\Bundle\SymfonyCommonBundle\DependencyInjection\ContainerStatic;
