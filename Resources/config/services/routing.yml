@@ -1,0 +1,6 @@
+services:
+
+  symfony_common.routing.utils:
+    class: Cosmologist\Bundle\SymfonyCommonBundle\RoutingUtils
+    arguments:
+      - '@http_kernel'

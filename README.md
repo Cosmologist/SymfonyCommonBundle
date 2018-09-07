@@ -1,22 +1,6 @@
 # SymfonyCommonBundle
 Useful features for Symfony, Doctrine, Twig etc.
 
-## Pass PHP functions and callables into Twig
-```yaml
-# app/config/config.yml
-  
-symfony_common:
-  twig:
-    php_extension:
-      filters:
-          - strip_tags # register php "strip_tags" function as twig "strip_tags" filter
-          -
-            foo_bar: # register static method MyApp\Foo::bar as twig filter "foo_bar"
-                  - MyApp\Foo
-                  - bar
-      functions:
-          - time # register php "time" function as twig "time" function
-```
 ## Doctrine utils
 Get Doctrine utils
 ```php
@@ -37,6 +21,50 @@ $utils->getEntitySingleIdentifierField(Entity::class);
 Get entity identifier value (does not support multiple identifiers - throws DoctrineUtilsException)
 ```php
 $utils->getEntitySingleIdentifierValue($entity);
+```
+
+## Routing utils
+Forwards to another URI.  
+Like *Symfony\Bundle\FrameworkBundle\Controller\Controller::forward*, but using URI.
+```php
+$utils = $container->get('symfony_common.routing.utils');
+
+$utils->forwardToUri('/products/programmers-t-shirts');
+// or
+$utils->forwardToUri('https://myshop.com/products/programmers-t-shirts');
+```
+
+Simple way to get doctrine entity metadata
+```php
+$utils->getClassMetadata($entity);
+$utils->getClassMetadata(Entity::class);
+```
+
+Get entity identifier field name (does not support multiple identifiers - throws DoctrineUtilsException)
+```php
+$utils->getEntitySingleIdentifierField($entity);
+$utils->getEntitySingleIdentifierField(Entity::class);
+```
+Get entity identifier value (does not support multiple identifiers - throws DoctrineUtilsException)
+```php
+$utils->getEntitySingleIdentifierValue($entity);
+```
+
+## Pass PHP functions and callables into Twig
+```yaml
+# app/config/config.yml
+  
+symfony_common:
+  twig:
+    php_extension:
+      filters:
+          - strip_tags # register php "strip_tags" function as twig "strip_tags" filter
+          -
+            foo_bar: # register static method MyApp\Foo::bar as twig filter "foo_bar"
+                  - MyApp\Foo
+                  - bar
+      functions:
+          - time # register php "time" function as twig "time" function
 ```
 
 ## Service controller
