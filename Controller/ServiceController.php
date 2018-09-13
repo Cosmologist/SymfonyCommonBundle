@@ -91,6 +91,14 @@ class ServiceController
             $arguments[] = $value;
         }
 
-        $service->$method(...$arguments);
+        $result = $service->$method(...$arguments);
+
+        if (is_scalar($result)) {
+            return new Response($result);
+        }
+
+        // todo: implement result analyzing and return it in the suitable format
+
+        return new Response();
     }
 }
