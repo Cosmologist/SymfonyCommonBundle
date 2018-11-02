@@ -5,6 +5,7 @@ namespace Cosmologist\Bundle\SymfonyCommonBundle\Controller;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use ReflectionMethod;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -52,7 +53,7 @@ class ServiceController
      * @param string  $service Service identifier
      * @param string  $method  Service method
      *
-     * @return Response
+     * @return Response|JsonResponse Simple response for scalar results and JSON for other
      */
     public function callServiceAction(Request $request, string $service, string $method): Response
     {
@@ -97,8 +98,6 @@ class ServiceController
             return new Response($result);
         }
 
-        // todo: implement result analyzing and return it in the suitable format
-
-        return new Response();
+        return new JsonResponse($result);
     }
 }
