@@ -3,6 +3,7 @@
 namespace Cosmologist\Bundle\SymfonyCommonBundle\Doctrine;
 
 use Cosmologist\Bundle\SymfonyCommonBundle\Exception\DoctrineUtilsException;
+use Cosmologist\Gears\ObjectType;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Util\ClassUtils;
@@ -27,6 +28,18 @@ class DoctrineUtils
     }
 
     /**
+     * Get entity real class
+     *
+     * @param string|object $target FQCN or object
+     *
+     * @return string FQCN
+     */
+    public function getRealClass($target)
+    {
+        return ClassUtils::getRealClass(ObjectType::castClass($target));
+    }
+
+    /**
      * Get doctrine class metadata
      *
      * @param object|string $entity Entity object or FQCN
@@ -35,11 +48,7 @@ class DoctrineUtils
      */
     public function getClassMetadata($entity)
     {
-        if (is_object($entity)) {
-            $entity = get_class($entity);
-        }
-
-        $fqcn = ClassUtils::getRealClass($entity);
+        $fqcn = $this->getRealClass($entity);
         if (null === $entityManager = $this->doctrine->getManagerForClass($fqcn)) {
             throw DoctrineUtilsException::unsupportedClass($fqcn);
         }
