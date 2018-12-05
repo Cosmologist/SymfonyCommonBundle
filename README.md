@@ -1,7 +1,23 @@
 # SymfonyCommonBundle
 Useful features for Symfony, Doctrine, Twig etc.
 
-## Doctrine utils
+## Doctrine
+
+### Extra DBAL events
+*Cosmologist\Bundle\SymfonyCommonBundle\Doctrine\ExtraConnection* is Doctrine DBAL-connection wrapper that adds a new "postCommit" event to the Doctrine event system.
+
+Add the wrapper_class parameter to the Doctrine DBAL connection configuration in config.yml to use:
+```yaml
+default:
+    driver: pdo_mysql
+    dbname: ~
+    user: ~
+    password: ~
+    host: ~
+    wrapper_class: \Cosmologist\Bundle\SymfonyCommonBundle\Doctrine\ExtraConnection
+```  
+
+### Utils
 Get Doctrine utils
 ```php
 $utils = $container->get('symfony_common.doctrine.utils');
