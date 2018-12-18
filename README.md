@@ -83,6 +83,8 @@ symfony_common:
           - time # register php "time" function as twig "time" function
 ```
 
+See also: [umpirsky/twig-php-function](https://github.com/umpirsky/twig-php-function)
+
 ## Service controller
 Calls DI services via HTTP.
   
