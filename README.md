@@ -39,7 +39,7 @@ Get entity identifier value (does not support multiple identifiers - throws Doct
 $utils->getEntitySingleIdentifierValue($entity);
 ```
 
-## Routing utils
+## Routing
 Forwards to another URI.  
 Like *Symfony\Bundle\FrameworkBundle\Controller\Controller::forward*, but using URI.
 ```php
@@ -48,22 +48,6 @@ $utils = $container->get('symfony_common.routing.utils');
 $utils->forwardToUri('/products/programmers-t-shirts');
 // or
 $utils->forwardToUri('https://myshop.com/products/programmers-t-shirts');
-```
-
-Simple way to get doctrine entity metadata
-```php
-$utils->getClassMetadata($entity);
-$utils->getClassMetadata(Entity::class);
-```
-
-Get entity identifier field name (does not support multiple identifiers - throws DoctrineUtilsException)
-```php
-$utils->getEntitySingleIdentifierField($entity);
-$utils->getEntitySingleIdentifierField(Entity::class);
-```
-Get entity identifier value (does not support multiple identifiers - throws DoctrineUtilsException)
-```php
-$utils->getEntitySingleIdentifierValue($entity);
 ```
 
 ## Pass PHP functions and callables into Twig
