@@ -1,0 +1,6 @@
+services:
+
+  symfony_common.security.voter.super_user_role:
+    class: Cosmologist\Bundle\SymfonyCommonBundle\Security\Voter\SuperUserRoleVoter
+    tags:
+     - { name: security.voter }

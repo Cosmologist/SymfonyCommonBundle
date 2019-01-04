@@ -22,6 +22,7 @@ class SymfonyCommonExtension extends Extension
         $loader->load('controller.yml');
         $loader->load('doctrine.yml');
         $loader->load('routing.yml');
+        $loader->load('security.yml');
         $loader->load('twig.yml');
 
         $container->setParameter('symfony_common.external_config', $config['external_config']);

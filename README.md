@@ -50,6 +50,10 @@ $utils->forwardToUri('/products/programmers-t-shirts');
 $utils->forwardToUri('https://myshop.com/products/programmers-t-shirts');
 ```
 
+## Security
+### ROLE_SUPER_USER
+*Cosmologist\Bundle\SymfonyCommonBundle\Security\Voter\SuperUserRoleVoter* adds a special role "ROLE_SUPER_USER" which effectively bypasses any, and all security checks.
+
 ## Pass PHP functions and callables into Twig
 ```yaml
 # app/config/config.yml
