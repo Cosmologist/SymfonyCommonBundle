@@ -4,8 +4,9 @@ Useful features for Symfony, Doctrine, Twig etc.
 ## Doctrine
 
 ### Extra DBAL events
-*Cosmologist\Bundle\SymfonyCommonBundle\Doctrine\ExtraConnection* is Doctrine DBAL-connection wrapper that adds a new "postCommit" event to the Doctrine event system.
+*Cosmologist\Bundle\SymfonyCommonBundle\Doctrine\ExtraConnection* is Doctrine DBAL-connection wrapper that add useful features and methods to DBAL.
 
+#### Activation
 Add the wrapper_class parameter to the Doctrine DBAL connection configuration in config.yml to use:
 ```yaml
 default:
@@ -16,6 +17,19 @@ default:
     host: ~
     wrapper_class: \Cosmologist\Bundle\SymfonyCommonBundle\Doctrine\ExtraConnection
 ```  
+
+#### Additional DBAL-events
+postBeginTransaction, postCommit, postRollback
+
+#### Helper methods
+*Connection::fetchAllIndexed* prepares and executes an SQL query and returns the result as an associative array, each row in the result set array is indexed by the value of the first column.
+```php
+$connection->fetchAllIndexed('SELECT id, name FROM users');
+// 1  => [id: 1, name: Ivan]
+// 7  => [id: 7, name: Vasiliy]
+// ...
+``` 
+
 
 ### Doctrine Utils
 Get Doctrine utils

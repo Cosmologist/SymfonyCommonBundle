@@ -2,6 +2,9 @@
 
 namespace Cosmologist\Bundle\SymfonyCommonBundle\Doctrine;
 
+/**
+ * Connection extra-events enum
+ */
 final class ExtraEvents
 {
     /**
@@ -11,5 +14,7 @@ final class ExtraEvents
     {
     }
 
+    const postBeginTransaction = 'postBeginTransaction';
     const postCommit = 'postCommit';
+    const postRollback = 'postRollback';
 }
