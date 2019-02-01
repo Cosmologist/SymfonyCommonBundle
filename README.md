@@ -68,7 +68,44 @@ $utils->forwardToUri('https://myshop.com/products/programmers-t-shirts');
 ### ROLE_SUPER_USER
 *Cosmologist\Bundle\SymfonyCommonBundle\Security\Voter\SuperUserRoleVoter* adds a special role "ROLE_SUPER_USER" which effectively bypasses any, and all security checks.
 
-## Symfony DI
+## Symfony DI and Configuration
+
+### Store key as attribute in configuration
+Useful for:
+- to simplify your configuration
+- to avoid problem of losing the key when you merge config across files ([Symfony Issue #29817](https://github.com/symfony/symfony/issues/29817))
+
+Usage:
+```php
+# AppBundle\DependencyInjection\Configuration.php
+...
+use Cosmologist\Bundle\SymfonyCommonBundle\DependencyInjection\ConfigurationUtils;
+...
+->arrayNode('events')
+    ->beforeNormalization()
+        ->always(ConfigurationUtils::useKeyAsAttribute('server'))
+    ->end()
+    ->prototype('array')
+...
+```
+Config like this:
+```
+something:
+  servers:
+     serverA:
+       username: userA
+       password: passwordA
+     serverB:
+       username: userB
+       password: passwordB
+```
+comes out like:
+```
+servers [
+   serverA => [username: userA, password: passwordA, server: serverA],
+   serverB => [username: userB, password: passwordB, server: serverB],
+ ]
+```
 
 ### Call any Symfony Service over HTTP 
   
