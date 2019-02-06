@@ -3,6 +3,7 @@
 namespace Cosmologist\Bundle\SymfonyCommonBundle\Controller;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Exception;
 use ReflectionMethod;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -92,7 +93,11 @@ class ServiceController
             $arguments[] = $value;
         }
 
-        $result = $service->$method(...$arguments);
+        try {
+            $result = $service->$method(...$arguments);
+        } catch (Exception $exception) {
+            return new Response($exception->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
 
         if (is_scalar($result)) {
             return new Response($result);
