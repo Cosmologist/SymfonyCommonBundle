@@ -13,11 +13,7 @@ class NullTolerancePropertyAccessor extends PropertyAccessor
      */
     public function getValue($objectOrArray, $propertyPath)
     {
-        try {
-        return parent::getValue($objectOrArray, $propertyPath);
-        } catch (UnexpectedTypeException|NoSuchPropertyException $exception) {
-            return null;
-        }
+        return parent::isReadable($objectOrArray, $propertyPath) ? parent::getValue($objectOrArray, $propertyPath) : null;
     }
 
 }
