@@ -18,7 +18,7 @@ class SymfonyCommonExtension extends Extension
         $config        = $this->processConfiguration($configuration, $configs);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config/services'));
-        $loader->load('controller.yml');
+        $loader->load('bridge.yml');
         $loader->load('doctrine.yml');
         $loader->load('routing.yml');
         $loader->load('security.yml');

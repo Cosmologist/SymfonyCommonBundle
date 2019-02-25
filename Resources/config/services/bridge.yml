@@ -1,0 +1,16 @@
+services:
+
+  symfony_common.service_bridge:
+    class: Cosmologist\Bundle\SymfonyCommonBundle\Bridge\ServiceBridge
+    arguments:
+      - '@service_container'
+      - '@doctrine'
+
+  symfony_common.controller.service_bridge_controller:
+      class: Cosmologist\Bundle\SymfonyCommonBundle\Controller\ServiceBridgeController
+      arguments:
+        - '@symfony_common.service_bridge'
+        - '@doctrine'
+
+  # BC
+  symfony_common.controller.service_controller: '@symfony_common.controller.service_bridge_controller'

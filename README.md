@@ -107,21 +107,32 @@ servers [
  ]
 ```
 
-### Call any Symfony Service over HTTP 
-  
-Send POST-request to specified URL like this:
-```example.com/admin/service/appbundle.service.processor/process```  
-where *appbundle.service.processor* is service name and *process* is name of method.  
-The method arguments must be passed as POST-parameters.  
-If the service expects the entity as argument (type-hint exists) - pass the entity identifier instead, the suitable entity will be loaded automatically (Doctrine is used, but you can use the custom loader in the future).
+#### ServiceBridge
+A convenient way to dynamically access symfony services.
 
-Don't forget to include the routing-file to enable the controller:
+#### Call any Symfony service over HTTP 
+
+##### Include routing.yml
 ```
 # app/config/routing.yml
 admin.service:
-    resource: "@SymfonyCommonBundle/Resources/config/routing.yml"
-    prefix:   /admin
+  resource: "@SymfonyCommonBundle/Resources/config/routing.yml"
+  prefix:   /admin
 ```
+
+##### Send POST-request
+URL example: 
+```yourdomain.com/bridge/mybundle.foo/bar```
+
+- **/bridge** is a ServiceBridge route suffix
+- *mybundle.foo* is service name
+- *process* is service method name
+
+Method arguments must be passed as POST parameters.
+ServiceBridge automatically fetches a Doctrine entity if the method expects an argument of the entity (the hint type of the argument).
+  
+The method arguments should be passed as POST-parameters.  
+ServiceBridge fetch entity from Doctrine automatically, by the identifier from request, if method expects entity argument (argument type-hint).
 
 **Caution**: Use security [access_control](https://symfony.com/doc/current/security/access_control.html) option to restrict access to the service controller.
 
