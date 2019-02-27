@@ -60,7 +60,7 @@ class ServiceBridge
         foreach ((new ReflectionMethod($service, $method))->getParameters() as $parameter) {
             $name = $parameter->getName();
 
-            if (in_array($name, $args)) {
+            if (array_key_exists($name, $args)) {
                 $value = $args[$name];
             } elseif ($parameter->isOptional()) {
                 $value = $parameter->getDefaultValue();
