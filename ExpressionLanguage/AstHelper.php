@@ -3,9 +3,11 @@
 namespace Cosmologist\Bundle\SymfonyCommonBundle\ExpressionLanguage;
 
 use Cosmologist\Gears\NumberType;
+use http\Exception\RuntimeException;
 use Symfony\Component\ExpressionLanguage\Node\ArrayNode;
 use Symfony\Component\ExpressionLanguage\Node\BinaryNode;
 use Symfony\Component\ExpressionLanguage\Node\ConstantNode;
+use Symfony\Component\ExpressionLanguage\Node\GetAttrNode;
 use Symfony\Component\ExpressionLanguage\Node\NameNode;
 use Symfony\Component\ExpressionLanguage\Node\Node;
 
@@ -64,6 +66,27 @@ class AstHelper
     }
 
     /**
+     * @param $node
+     *
+     * @return array|mixed|string|null
+     */
+    public static function getPath($node)
+    {
+        if (!self::isNameNode($node) && !self::isGetAttrNode($node) && !self::isConstantNode($node)) {
+            throw new RuntimeException(sprinft('NameNode, GetAttrNode or ConstantNode expected, "%s" found', get_class($node)));
+        }
+
+        if (self::isNameNode($node)) {
+            return self::getName($node);
+        }
+        if (self::isConstantNode($node)) {
+            return self::getValue($node);
+        }
+
+        return self::getPath($node->nodes['node']) . '.' . self::getPath($node->nodes['attribute']);
+    }
+
+    /**
      * @param Node $node
      *
      * @return Node
@@ -90,7 +113,7 @@ class AstHelper
      */
     public static function getRight(Node $node): Node
     {
-        return $node->nodes['left'];
+        return $node->nodes['right'];
     }
 
     /**
@@ -122,6 +145,17 @@ class AstHelper
     {
         return $node instanceof ConstantNode;
     }
+
+    /**
+     * @param Node $node
+     *
+     * @return bool
+     */
+    public static function isGetAttrNode(Node $node): bool
+    {
+        return $node instanceof GetAttrNode;
+    }
+
 
     /**
      * @param Node $node
