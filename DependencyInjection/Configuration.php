@@ -2,7 +2,7 @@
 
 namespace Cosmologist\Bundle\SymfonyCommonBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Cosmologist\Bundle\SymfonyCommonBundle\Type\CallableType;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -24,6 +24,24 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('external_config')
                     ->prototype('array')
                         ->prototype('variable')->end()
+                    ->end()
+                ->end()
+
+                ->arrayNode('expression_language')
+                    ->children()
+                        ->arrayNode('presets')
+                            ->prototype('array')
+                                ->prototype('variable')
+                                    ->info('Function. Supported formats: "foo", "FooStaticClass::bar", "FooDIService::bar").')
+                                    ->validate()
+                                        ->always(function ($value) {
+                                            return !CallableType::validate($value);
+                                        })
+                                        ->then('Invalid callable format')
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
 
