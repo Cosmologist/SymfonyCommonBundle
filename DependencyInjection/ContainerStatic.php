@@ -2,10 +2,8 @@
 
 namespace Cosmologist\Bundle\SymfonyCommonBundle\DependencyInjection;
 
-use AppCache;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Static access to the service container
@@ -13,60 +11,75 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class ContainerStatic
 {
     /**
-     * Instance of container.
+     * Container
      *
-     * @var null|ContainerInterface
+     * @var ContainerInterface
      */
-    protected static $container = null;
+    protected static $container;
 
     /**
-     * Set the service container.
+     * Set the service container
      *
-     * @param ContainerInterface The service container
+     * @internal
+     *
+     * @param ContainerInterface $container The service container
      */
-    static function setContainer(ContainerInterface $container)
+    public static function setContainer(ContainerInterface $container)
     {
         self::$container = $container;
     }
 
     /**
-     * Returns the service container.
+     * Returns the service container
      *
-     * @return ContainerInterface|null The service container
+     * @return ContainerInterface The service container
      */
-    static function getContainer(): ?ContainerInterface
+    public static function getContainer(): ContainerInterface
     {
+        if (self::$container === null) {
+            throw new RuntimeException('ContainerStatic is not initialized. Have you added the symfonyCommonBundle in AppKernel.php?');
+        }
         return self::$container;
     }
 
     /**
-     * Gets a service.
+     * Gets a service statically
      *
-     * @param string $id              The service identifier
-     * @param int    $invalidBehavior The behavior when the service does not exist
+     * @param string $id The service identifier
      *
      * @return object The associated service
      *
-     * @throws ServiceCircularReferenceException When a circular reference is detected
-     * @throws ServiceNotFoundException          When the service is not defined
-     *
-     * @see Reference
+     * @see ContainerInterface::get
      */
-    static function get(string $id)
+    public static function get(string $id)
     {
         return self::$container->get($id);
     }
 
     /**
-     * Gets a parameter.
+     * Checks if a service exists statically
+     *
+     * @param string $id The service identifier
+     *
+     * @return bool
+     *
+     * @see ContainerInterface::has
+     */
+    public static function has(string $id): bool
+    {
+        return self::$container->has($id);
+    }
+
+    /**
+     * Gets a parameter statically
      *
      * @param string $name The parameter name
      *
      * @return mixed The parameter value
      *
-     * @throws InvalidArgumentException if the parameter is not defined
+     * @see ContainerInterface::getParameter()
      */
-    static function getParameter(string $name)
+    public static function getParameter(string $name)
     {
         return self::$container->getParameter($name);
     }
