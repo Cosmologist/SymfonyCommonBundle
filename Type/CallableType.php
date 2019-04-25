@@ -4,39 +4,32 @@ namespace Cosmologist\Bundle\SymfonyCommonBundle\Type;
 
 use Cosmologist\Bundle\SymfonyCommonBundle\DependencyInjection\ContainerStatic;
 use Cosmologist\Gears\CallableType as GearsCallableType;
-use Cosmologist\Gears\StringType;
 
-class CallableType
+class CallableType extends GearsCallableType
 {
     /**
-     * Parse callable from string expression.
-     *
-     * Supported syntax:
-     * - 'serviceName::method' - callable for Symfony DI service method.
-     * - 'My\ClassName::method' - callable for static class method.
-     * - 'myFunction' - callable for function.
-     *
-     * @see Cosmologist\Gears\CallableType::parse
-     *
-     * @param string $expression The callable expression.
-     *
-     * @return callable
+     * {@inheritDoc}
      */
     public static function parse(string $expression): callable
     {
-        if (!StringType::contains($expression, GearsCallableType::SEPARATOR)) {
-            return $expression;
+        if (!self::isCompositeFormat($expression)) {
+            return parent::parse($expression);
         }
 
-        $classOrService = StringType::strBefore($expression, GearsCallableType::SEPARATOR);
-        $method         = StringType::strAfter($expression, GearsCallableType::SEPARATOR);
+        list($id, $method) = self::parseComposite($expression);
 
-        $container = ContainerStatic::getContainer();
+        return [ContainerStatic::get($id), $method];
+    }
 
-        if ($container->has($classOrService)) {
-            $classOrService = $container->get($classOrService);
-        }
+    /**
+     * {@inheritDoc}
+     */
+    public static function validate(string $expression): bool
+    {
+        list($id, $method) = self::parseComposite($expression);
 
-        return [$classOrService, $method];
+        return self::isCompositeFormat($expression) && ContainerStatic::has($id) && method_exists(ContainerStatic::get($id), $method) ? true : parent::validate(
+            $expression
+        );
     }
 }
