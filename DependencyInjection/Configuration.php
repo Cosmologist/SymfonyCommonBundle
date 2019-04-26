@@ -34,10 +34,10 @@ class Configuration implements ConfigurationInterface
                                 ->prototype('variable')
                                     ->info('Function. Supported formats: "foo", "FooStaticClass::bar", "FooDIService::bar").')
                                     ->validate()
-                                        ->always(function ($value) {
+                                        ->ifTrue(function ($value) {
                                             return !CallableType::validate($value);
                                         })
-                                        ->then('Invalid callable format')
+                                        ->thenInvalid('Invalid callable format')
                                     ->end()
                                 ->end()
                             ->end()
