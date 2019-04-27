@@ -2,6 +2,7 @@
 
 namespace Cosmologist\Bundle\SymfonyCommonBundle\DependencyInjection;
 
+use Cosmologist\Bundle\SymfonyCommonBundle\ExpressionLanguage\ExpressionLanguageRegistry;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -28,5 +29,20 @@ class SymfonyCommonExtension extends Extension
 
         $container->setParameter('symfony_common.twig.php_extension.filters', $config['twig']['php_extension']['filters']);
         $container->setParameter('symfony_common.twig.php_extension.functions', $config['twig']['php_extension']['functions']);
+
+        $this->initExpressionLanguageRegistry($container, $config['expression_language']['presets'] ?? []);
+
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param array            $presets
+     */
+    private function initExpressionLanguageRegistry(ContainerBuilder $container, array $presets)
+    {
+        $definition = $container->register(ExpressionLanguageRegistry::class);
+        foreach ($presets as $name => $functions) {
+            $definition->addMethodCall('set', [$name, $functions]);
+        }
     }
 }
