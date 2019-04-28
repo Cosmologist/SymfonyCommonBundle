@@ -38,6 +38,6 @@ class ExpressionLanguageRegistry
             throw new RuntimeException("ExpressionLanguage preset '$name' not found");
         }
 
-        return new ExpressionLanguage(null, new PresetFunctionProvider($this->functions[$name]));
+        return new ExpressionLanguage(null, [new PresetFunctionProvider($this->functions[$name])]);
     }
 }

@@ -42,7 +42,7 @@ class SymfonyCommonExtension extends Extension
     {
         $definition = $container->register(ExpressionLanguageRegistry::class);
         foreach ($presets as $name => $functions) {
-            $definition->addMethodCall('set', [$name, $functions]);
+            $definition->addMethodCall('set', [$name, array_combine($functions, $functions)]);
         }
     }
 }
