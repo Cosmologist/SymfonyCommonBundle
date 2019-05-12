@@ -12,11 +12,11 @@ class CallableType extends GearsCallableType
      */
     public static function parse(string $expression): callable
     {
-        if (!self::isCompositeFormat($expression)) {
+        if (self::validateServiceCallable($expression) === false) {
             return parent::parse($expression);
         }
 
-        list($id, $method) = self::parseComposite($expression);
+        [$id, $method] = self::parseComposite($expression);
 
         return [ContainerStatic::get($id), $method];
     }
@@ -26,10 +26,18 @@ class CallableType extends GearsCallableType
      */
     public static function validate(string $expression): bool
     {
-        list($id, $method) = self::parseComposite($expression);
+        return self::validateServiceCallable($expression) || parent::validate($expression);
+    }
 
-        return self::isCompositeFormat($expression) && ContainerStatic::has($id) && method_exists(ContainerStatic::get($id), $method) ? true : parent::validate(
-            $expression
-        );
+    /**
+     * @param string $expression
+     *
+     * @return bool
+     */
+    private static function validateServiceCallable(string $expression)
+    {
+        [$id, $method] = self::parseComposite($expression);
+
+        return self::isCompositeFormat($expression) && ContainerStatic::has($id) && method_exists(ContainerStatic::get($id), $method);
     }
 }
