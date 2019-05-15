@@ -36,7 +36,7 @@ class DoctrineUtils
      */
     public function getRealClass($target)
     {
-        return ClassUtils::getRealClass(ObjectType::castClass($target));
+        return ClassUtils::getRealClass(ObjectType::toClassName($target));
     }
 
     /**
