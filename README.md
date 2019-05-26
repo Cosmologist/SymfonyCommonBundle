@@ -68,7 +68,7 @@ $utils->forwardToUri('https://myshop.com/products/programmers-t-shirts');
 ### ROLE_SUPER_USER
 *Cosmologist\Bundle\SymfonyCommonBundle\Security\Voter\SuperUserRoleVoter* adds a special role "ROLE_SUPER_USER" which effectively bypasses any, and all security checks.
 
-## Symfony DI and Configuration
+## Dependency Injection
 
 ### Store key as attribute in configuration
 Useful for:
@@ -164,6 +164,24 @@ symfony_common:
 ```
 
 See also: [umpirsky/twig-php-function](https://github.com/umpirsky/twig-php-function)
+
+## Monolog
+### Monolog activation strategy for Symfony 3.x to skip the 404 HttpException records.
+Monolog NotFoundActivationStrategy (activation_strategy, excluded_404s and excluded_http_codes options) does not work in Symfony 3.0 as currently monolog-bundle injects a reference to request from the service container into the NotFoundActivationStrategy.
+
+- [Issue #166](https://github.com/symfony/monolog-bundle/issues/166#issuecomment-221725696)
+
+#### TODO
+ - Other HTTP-codes support
+ - Configure default actionLevel value via Configuration 
+
+#### Usage
+```yaml
+    main:
+      type:                fingers_crossed
+      handler:             grouped
+       activation_strategy: symfony_common.monolog.fingers_crossed.ignore_http_not_found_activation_strategy
+```
 
 ## Dump configuration files for external related applications
 Useful when you want to deduplicate application parameters (like db-connections, paths etc) and store related external applications configurations (backup-systems, crontab etc) inside the project.

@@ -21,6 +21,7 @@ class SymfonyCommonExtension extends Extension
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config/services'));
         $loader->load('bridge.yml');
         $loader->load('doctrine.yml');
+        $loader->load('monolog.yml');
         $loader->load('routing.yml');
         $loader->load('security.yml');
         $loader->load('twig.yml');
