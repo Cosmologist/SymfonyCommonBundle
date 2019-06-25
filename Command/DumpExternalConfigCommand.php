@@ -5,6 +5,7 @@ namespace Cosmologist\Bundle\SymfonyCommonBundle\Command;
 use Cosmologist\Gears\ArrayType;
 use Cosmologist\Gears\FileSystem as GearsFilesystem;
 use Cosmologist\Gears\StringType;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -58,13 +59,13 @@ class DumpExternalConfigCommand extends ContainerAwareCommand
         }
 
         if (!$filesystem->isAbsolutePath($dist)) {
-            $dist = GearsFilesystem::joinPaths([$appDir, 'config', 'external', 'dist', $dist]);
+            $dist = GearsFilesystem::joinPaths($appDir, 'config', 'external', 'dist', $dist);
         }
 
         $config = $twig->render($dist, $parameters);
 
         if (!$to) {
-            $to = GearsFilesystem::joinPaths([$cacheDir, self::TWIG_GLOBALS_CONFIG_SECTION, basename($dist)]);
+            $to = GearsFilesystem::joinPaths($cacheDir, self::TWIG_GLOBALS_CONFIG_SECTION, basename($dist));
             if (StringType::endsWith($to, '.twig')) {
                 $to = substr($to, 0, -5);
             }
