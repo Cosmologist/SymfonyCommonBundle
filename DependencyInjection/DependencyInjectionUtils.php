@@ -2,7 +2,9 @@
 
 namespace Cosmologist\Bundle\SymfonyCommonBundle\DependencyInjection;
 
-class ConfigurationUtils
+use Symfony\Component\DependencyInjection\Reference;
+
+class DependencyInjectionUtils
 {
     /**
      * Sets the attribute that should hold the node key.
@@ -61,5 +63,29 @@ class ConfigurationUtils
 
             return $map;
         };
+    }
+
+    /**
+     * Convenient way to get a Reference to a Doctrine DBAL connection
+     *
+     * @param string $name
+     *
+     * @return Reference
+     */
+    public static function getDoctrineDbalConnectionReference(string $name): Reference
+    {
+        return new Reference("doctrine.dbal.${name}_connection");
+    }
+
+    /**
+     * Convenient way to get a Reference to a Doctrine EntityManager
+     *
+     * @param string $name
+     *
+     * @return Reference
+     */
+    public static function getDoctrineOrmEntityManagerReference(string $name): Reference
+    {
+        return new Reference("doctrine.orm.${name}_entity_manager");
     }
 }

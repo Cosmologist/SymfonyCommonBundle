@@ -70,6 +70,16 @@ $utils->forwardToUri('https://myshop.com/products/programmers-t-shirts');
 
 ## Dependency Injection
 
+### Convenient way to get a Reference to a Doctrine DBAL connection
+```php
+DependencyInjectionUtils::getDoctrineDbalConnectionReference('default'); // doctrine.dbal.default_connection
+```
+
+### Convenient way to get a Reference to a Doctrine EntityManager
+```php
+DependencyInjectionUtils::getDoctrineOrmEntityManagerReference('default'); // doctrine.orm.default_entity_manager
+```
+
 ### Store key as attribute in configuration
 Useful for:
 - to simplify your configuration
@@ -79,7 +89,7 @@ Usage:
 ```php
 # AppBundle\DependencyInjection\Configuration.php
 ...
-use Cosmologist\Bundle\SymfonyCommonBundle\DependencyInjection\ConfigurationUtils;
+use Cosmologist\Bundle\SymfonyCommonBundle\DependencyInjection\DependencyInjectionUtils;
 ...
 ->arrayNode('events')
     ->beforeNormalization()
