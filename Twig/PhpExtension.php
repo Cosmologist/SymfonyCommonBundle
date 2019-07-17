@@ -2,31 +2,34 @@
 
 namespace Cosmologist\Bundle\SymfonyCommonBundle\Twig;
 
-use Twig_Extension;
+use Cosmologist\Bundle\SymfonyCommonBundle\Type\CallableType;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 /**
- * Extension brings pre-configured list of functions and static class methods into Twig as filters and functions
+ * The extension provides various callable objects (functions, method of static classes methods, methods of container services) to Twig templates.
  */
-class PhpExtension extends Twig_Extension
+class PhpExtension extends AbstractExtension
 {
     /**
      * @var array
      */
-    private $availableFunctions;
+    private $functions;
 
     /**
      * @var array
      */
-    private $availableFilters;
+    private $filters;
 
     /**
-     * @param array $availableFunctions
-     * @param array $availableFilters
+     * @param array $functions
+     * @param array $filters
      */
-    public function __construct(array $availableFunctions, array $availableFilters)
+    public function __construct(array $functions, array $filters)
     {
-        $this->availableFunctions = $availableFunctions;
-        $this->availableFilters   = $availableFilters;
+        $this->functions = $functions;
+        $this->filters   = $filters;
     }
 
     /**
@@ -34,15 +37,7 @@ class PhpExtension extends Twig_Extension
      */
     public function getFilters()
     {
-        $callbacks = $this->getCallbacks($this->availableFilters);
-
-        return
-            \array_map(
-                function ($function, $callback) {
-                    return new \Twig_SimpleFilter($function, $callback);
-                },
-                \array_keys($callbacks), $callbacks
-            );
+        return $this->prepare($this->filters, TwigFilter::class);
     }
 
     /**
@@ -50,48 +45,26 @@ class PhpExtension extends Twig_Extension
      */
     public function getFunctions()
     {
-        $callbacks = $this->getCallbacks($this->availableFunctions);
-
-        return
-            \array_map(
-                function ($function, $callback) {
-                    return new \Twig_SimpleFunction($function, $callback);
-                },
-                \array_keys($callbacks), $callbacks
-            );
+        return $this->prepare($this->functions, TwigFunction::class);
     }
 
     /**
-     * Build callbacks for callables from configuration
+     * Prepares callable objects defined in the application config for Twig
      *
-     * @param string|array $callables
+     * @param array  $functions
+     * @param string $twigCallableClass
      *
      * @return array
      */
-    private function getCallbacks($callables)
+    protected function prepare(array $functions, string $twigCallableClass): array
     {
-        $result = array();
-
-        foreach ($callables as $function) {
-
-            if (is_array($function) && !is_numeric(key($function))) {
-                $callback = current($function);
-                $function = key($function);
-            } else {
-                $callback = $function;
-            }
-
-            $result[$function] = $callback;
-        }
-
-        return $result;
-    }
-
-    /**
-     * {@inheritdoc};
-     */
-    public function getName()
-    {
-        return 'symfony_common_php_extension';
+        return
+            array_map(
+                function ($expression, $name) use ($twigCallableClass) {
+                    return new $twigCallableClass($name, CallableType::toCallable($expression));
+                },
+                $functions,
+                array_keys($functions)
+            );
     }
 }

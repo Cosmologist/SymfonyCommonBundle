@@ -16,6 +16,20 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
+        $twigFunctionsNormalizer = function ($list) {
+            $normalized = [];
+
+            foreach ($list as $item) {
+                if (is_string($item)) {
+                    $normalized[$item] = $item;
+                } else {
+                    $normalized += $item;
+                }
+            }
+
+            return $normalized;
+        };
+
         $treeBuilder = new TreeBuilder();
         $rootNode    = $treeBuilder->root('symfony_common');
 
@@ -50,10 +64,18 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('php_extension')
                             ->children()
                                 ->arrayNode('filters')
+                                    ->beforeNormalization()
+                                        ->always($twigFunctionsNormalizer)
+                                    ->end()
+
                                     ->prototype('variable')
                                     ->end()
                                 ->end()
                                 ->arrayNode('functions')
+                                        ->beforeNormalization()
+                                            ->always($twigFunctionsNormalizer)
+                                        ->end()
+
                                     ->prototype('variable')
                                     ->end()
                                 ->end()
