@@ -39,11 +39,15 @@ class RunnerCommand extends Command
      */
     protected function parseClassAndMethod(array $tokens, int $lineNumber): array
     {
-        $forward = function (&$tokens, $stopOnTokens = []) {
+        $lastToken = null;
+
+        $forward = function (&$tokens, $stopOnTokens = []) use (&$lastToken) {
             while ($token = array_shift($tokens)) {
                 if (in_array(is_string($token) ? $token : $token[0], $stopOnTokens)) {
                     return $token;
                 }
+
+                $lastToken = $token;
             }
 
             return false;
@@ -61,7 +65,7 @@ class RunnerCommand extends Command
 
                     $class .= $subtoken[1];
                 }
-            } elseif ($token[0] === T_CLASS) {
+            } elseif ($token[0] === T_CLASS && $lastToken[0] !== T_PAAMAYIM_NEKUDOTAYIM) {
                 $class .= '\\' . $forward($tokens, [T_STRING])[1];
             } elseif ($token[0] === T_FUNCTION) {
                 $method = $forward($tokens, [T_STRING])[1];
