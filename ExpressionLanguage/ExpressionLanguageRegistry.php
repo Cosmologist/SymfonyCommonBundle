@@ -32,8 +32,11 @@ class ExpressionLanguageRegistry
      *
      * @return ExpressionLanguage
      */
-    public function get(string $name): ExpressionLanguage
+    public function get(string $name = null): ExpressionLanguage
     {
+        if ($name === null) {
+            return new ExpressionLanguage();
+        }
         if (!array_key_exists($name, $this->functions)) {
             throw new RuntimeException("ExpressionLanguage preset '$name' not found");
         }
