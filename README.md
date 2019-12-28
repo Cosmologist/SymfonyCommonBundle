@@ -120,7 +120,7 @@ servers [
 #### ServiceBridge
 A convenient way to dynamically access symfony services.
 
-#### Call any Symfony service over HTTP 
+#### Call Symfony services over HTTP 
 
 ##### Include routing.yml
 ```
@@ -145,6 +145,11 @@ The method arguments should be passed as POST-parameters.
 ServiceBridge fetch entity from Doctrine automatically, by the identifier from request, if method expects entity argument (argument type-hint).
 
 **Caution**: Use security [access_control](https://symfony.com/doc/current/security/access_control.html) option to restrict access to the service controller.
+
+##### Return types to response types map
+- array|object -> json
+- binary string -> response with content-disposition=attachment and binary content-type
+- another scalar -> simple response
 
 ### Static access to the service container from anywhere
 ```php

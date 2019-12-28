@@ -5,4 +5,3 @@ symfony_common.bridge:
   requirements:
     service: '[a-zA-Z0-9_\.-]+'
     method: '[a-zA-Z0-9_]+'
-  methods: [POST]
