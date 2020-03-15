@@ -73,7 +73,7 @@ class ServiceBridgeController
                 $response->headers->add(
                     [
                         'Content-Type'        => StringType::guessMime($result),
-                        'Content-Disposition' => $response->headers->makeDispositigon($this->contentDispositionTypeDefault, $filename),
+                        'Content-Disposition' => $response->headers->makeDisposition($this->contentDispositionTypeDefault, $filename),
                     ]
                 );
             }
