@@ -19,6 +19,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class ServiceBridgeController
 {
     /**
+     * Default Content-Disposition type for binary http-response
+     *
+     * @var string
+     */
+    private $contentDispositionTypeDefault = ResponseHeaderBag::DISPOSITION_INLINE;
+
+    /**
      * @var ServiceBridge
      */
     private $serviceBridge;
@@ -66,7 +73,7 @@ class ServiceBridgeController
                 $response->headers->add(
                     [
                         'Content-Type'        => StringType::guessMime($result),
-                        'Content-Disposition' => $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename),
+                        'Content-Disposition' => $response->headers->makeDispositigon($this->contentDispositionTypeDefault, $filename),
                     ]
                 );
             }
@@ -76,4 +83,21 @@ class ServiceBridgeController
 
         return new JsonResponse($result);
     }
+
+    /**
+     * Set default Content-Disposition type as 'attachment'
+     */
+    public function setContentDispositionTypeDefaultAttachment()
+    {
+        $this->contentDispositionTypeDefault = ResponseHeaderBag::DISPOSITION_ATTACHMENT;
+    }
+
+    /**
+     * Set default Content-Disposition type as 'inline'
+     */
+    public function setContentDispositionTypeDefaultInline()
+    {
+        $this->contentDispositionTypeDefault = ResponseHeaderBag::DISPOSITION_INLINE;
+    }
+
 }
