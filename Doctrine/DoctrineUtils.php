@@ -57,6 +57,8 @@ class DoctrineUtils
     }
 
     /**
+     * @deprecated Use UnitOfWork::etSingleIdentifierValue instead
+     *
      * Get entity identifier field
      *
      * If entity implements multiple identifiers then throw exception
@@ -100,7 +102,7 @@ class DoctrineUtils
         $identifiers = $metadata->getIdentifierValues($entity);
 
         if (count($identifiers) !== 1) {
-            throw DoctrineUtilsException::unsupportedPrimaryKey($metadata->getName());
+             throw DoctrineUtilsException::unsupportedPrimaryKey($metadata->getName());
         }
 
         return current($identifiers);
