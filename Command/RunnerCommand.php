@@ -28,7 +28,9 @@ class RunnerCommand extends Command
     {
         [$class, $method] = $this->parseClassAndMethod(token_get_all(file_get_contents($input->getArgument('file'))), $input->getArgument('line'));
 
-        var_dump(call_user_func_array(CallableType::toCallable("$class::$method"), []));
+        $result = call_user_func_array(CallableType::toCallable("$class::$method"), []);
+
+        var_dump($result);
     }
 
     /**
@@ -56,6 +58,9 @@ class RunnerCommand extends Command
         $class = $method = null;
 
         while ($token = $forward($tokens, [T_NAMESPACE, T_CLASS, T_FUNCTION])) {
+            if ($token[2] > $lineNumber) {
+                break;
+            }
 
             if ($token[0] === T_NAMESPACE) {
                 while ($subtoken = $forward($tokens, [T_STRING, T_NS_SEPARATOR, ';'])) {
@@ -69,10 +74,6 @@ class RunnerCommand extends Command
                 $class .= '\\' . $forward($tokens, [T_STRING])[1];
             } elseif ($token[0] === T_FUNCTION) {
                 $method = $forward($tokens, [T_STRING])[1];
-            }
-
-            if ($token[2] >= $lineNumber) {
-                break;
             }
         }
 
