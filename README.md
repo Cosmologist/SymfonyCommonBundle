@@ -198,6 +198,16 @@ Monolog NotFoundActivationStrategy (activation_strategy, excluded_404s and exclu
        activation_strategy: symfony_common.monolog.fingers_crossed.ignore_http_not_found_activation_strategy
 ```
 
+## BrowserKit
+Add the specified HTTP-header to the prepared BrowserKit request
+```php
+use Cosmologist\Bundle\SymfonyCommonBundle\BrowserKit\BrowserKitUtils;
+
+/** @var \Symfony\Component\BrowserKit\Client $cient */
+
+BrowserKitUtils::addHeader($client, 'header-name', 'header-value');
+````
+
 ## Dump configuration files for external related applications
 Useful when you want to deduplicate application parameters (like db-connections, paths etc) and store related external applications configurations (backup-systems, crontab etc) inside the project.
 
