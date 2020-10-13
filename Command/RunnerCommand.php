@@ -18,7 +18,19 @@ class RunnerCommand extends Command
         $this
             ->setName('symfony-common:runner')
             ->addArgument('file', InputArgument::REQUIRED, 'The class to run')
-            ->addArgument('line', InputArgument::REQUIRED, 'The method to run');
+            ->addArgument('line', InputArgument::REQUIRED, 'The method to run')
+            ->setDescription('Executes the code located in the passed file on the passed line')
+            ->setHelp('This is useful for debugging code.' . PHP_EOL .
+                'If you are using PhpStorm, then an easy way to use this feature is to create an external tool (File-> Settings-> Tools-> External Tool) with parameters:' . PHP_EOL .
+                ' - Name: Runner' . PHP_EOL .
+                ' - Program: /usr/bin/php' . PHP_EOL .
+                ' - Arguments: -d xdebug.remote_autostart=1 -d xdebug.remote_enable=1 bin/console symfony-common:runner $FilePath$ $LineNumber$' . PHP_EOL .
+                ' - Working Directory: $ProjectFileDir$' . PHP_EOL .
+                PHP_EOL .
+                'After that, select Tools -> External Tools -> Runner - the command will try to execute a function or method from where the cursor is currently located.' . PHP_EOL .
+                'At this point, execution will not automatically stop at the specified location - you must manually set a breakpoint.'
+            )
+        ;
     }
 
     /**

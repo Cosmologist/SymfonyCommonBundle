@@ -1,6 +1,18 @@
 # SymfonyCommonBundle
 Useful features for Symfony, Doctrine, Twig etc.
 
+## Debug
+### Easy way to start debug with RunnerCommand
+If you are using *PhpStorm*, then an easy way to use this feature is to create an external tool (*File-> Settings-> Tools-> External Tools*) with parameters:
+ - Name: Runner
+ - Program: */usr/bin/php*
+ - Arguments: *-d xdebug.remote_autostart=1 -d xdebug.remote_enable=1 bin/console symfony-common:runner $FilePath$ $LineNumber$*
+ - Working Directory: *$ProjectFileDir$*
+ 
+After that, select *Tools -> External Tools -> Runner* - the command will try to execute a function or method from where the cursor is currently located.  
+At this point, execution will not automatically stop at the specified location - you must manually set a breakpoint. 
+
+
 ## Doctrine
 
 ### Extra DBAL events
