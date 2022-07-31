@@ -3,7 +3,7 @@
 namespace Cosmologist\Bundle\SymfonyCommonBundle\ExpressionLanguage;
 
 use Cosmologist\Gears\NumberType;
-use http\Exception\RuntimeException;
+use RuntimeException;
 use Symfony\Component\ExpressionLanguage\Node\ArrayNode;
 use Symfony\Component\ExpressionLanguage\Node\BinaryNode;
 use Symfony\Component\ExpressionLanguage\Node\ConstantNode;
