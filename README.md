@@ -143,12 +143,14 @@ admin.service:
 ```
 
 ##### Send POST-request
-URL example: 
-```yourdomain.com/bridge/mybundle.foo/bar```
+URL example:  
+```yourdomain.com/bridge/mybundle.foo/bar```  
+or  
+```yourdomain.com/bridge/MyBundle\Foo/bar```
 
 - **/bridge** is a ServiceBridge route suffix
-- *mybundle.foo* is service name
-- *process* is service method name
+- **mybundle.foo** (or **MyBundle\Foo**) is a service name
+- **process** is service method name
 
 Method arguments must be passed as POST parameters.
 ServiceBridge automatically fetches a Doctrine entity if the method expects an argument of the entity (the hint type of the argument).

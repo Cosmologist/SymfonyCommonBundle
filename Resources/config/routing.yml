@@ -3,5 +3,5 @@ symfony_common.bridge:
   defaults:
     _controller: symfony_common.controller.service_bridge_controller:callAction
   requirements:
-    service: '[a-zA-Z0-9_\.-]+'
+    service: '[a-zA-Z0-9_\.\\-]+'
     method: '[a-zA-Z0-9_]+'
