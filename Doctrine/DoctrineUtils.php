@@ -44,13 +44,14 @@ class DoctrineUtils
      *
      * @param object|string $entity Entity object or FQCN
      *
-     * @return ClassMetadata
+     * @return ClassMetadata|null
      */
     public function getClassMetadata($entity)
     {
         $fqcn = $this->getRealClass($entity);
+
         if (null === $entityManager = $this->doctrine->getManagerForClass($fqcn)) {
-            throw DoctrineUtilsException::unsupportedClass($fqcn);
+            return null;
         }
 
         return $entityManager->getClassMetadata($fqcn);
