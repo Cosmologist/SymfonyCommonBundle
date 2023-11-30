@@ -65,6 +65,11 @@ Get entity identifier value (does not support multiple identifiers - throws Doct
 $utils->getEntitySingleIdentifierValue($entity);
 ```
 
+Determine if the object or FQCN is a Doctrine entity (under Doctrine control) or not
+```php
+$utils->isEntity($entity);
+```
+
 ## Routing
 Forwards to another URI.  
 Like *Symfony\Bundle\FrameworkBundle\Controller\Controller::forward*, but using URI.

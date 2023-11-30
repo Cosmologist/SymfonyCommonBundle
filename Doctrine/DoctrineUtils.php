@@ -108,4 +108,16 @@ class DoctrineUtils
 
         return current($identifiers);
     }
+
+    /**
+     * Determine if the object or FQCN is a Doctrine entity (under Doctrine control) or not
+     *
+     * @param object|string $entity Entity object or FQCN
+     *
+     * @return bool
+     */
+    public function isEntity($entity)
+    {
+        return null !== $this->doctrine->getManagerForClass($this->getRealClass($entity));
+    }
 }
