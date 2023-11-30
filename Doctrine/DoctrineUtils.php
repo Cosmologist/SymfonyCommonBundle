@@ -108,22 +108,4 @@ class DoctrineUtils
 
         return current($identifiers);
     }
-
-    /**
-     * Dump entity data to array
-     *
-     * @param object $entity Entity
-     *
-     * @return array
-     */
-    public function dump($entity): array
-    {
-        $dump = [];
-
-        foreach ($this->getClassMetadata($entity)->reflFields as $name => $refProp) {
-            $dump[$name] = $refProp->getValue($entity);
-        }
-
-        return $dump;
-    }
 }
