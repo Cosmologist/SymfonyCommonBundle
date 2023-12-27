@@ -70,6 +70,11 @@ Determine if the object or FQCN is a Doctrine entity (under Doctrine control) or
 $utils->isEntity($entity);
 ```
 
+Compute a QueryBuilder results count
+```php
+$utils->resultCount($queryBuilder);
+```
+
 ## Routing
 Forwards to another URI.  
 Like *Symfony\Bundle\FrameworkBundle\Controller\Controller::forward*, but using URI.
