@@ -147,4 +147,46 @@ class DoctrineUtils
 
         return $queryBuilderCount->getQuery()->getSingleScalarResult();
     }
+
+    /**
+     * Get the readable alias for the doctrine entity
+     *
+     * <strong>Example:</strong>
+     * <code>
+     * $this->getEntityAlias(FooBundle\Entity\Bar\Baz::class); // 'foo.bar.baz'
+     * $this->decodeEntityAlias('foo.bar.baz'); // 'FooBundle\Entity\Bar\Baz::class'
+     * </code>
+     *
+     * Use the {@link DoctrineUtils::decodeEntityAlias()} to backward transformation.
+     *
+     * @param string $fqcn The Doctrine entity FQCN
+     *
+     * @return string
+     */
+    public static function getEntityAlias(string $fqcn)
+    {
+        $transform = str_replace(['\\Entity\\', 'Bundle\\'], '\\', trim($fqcn, '\\'));
+
+        return implode('.', array_map('lcfirst', explode('\\', $transform)));
+    }
+
+    /**
+     * Get the doctrine entity FQCN from the entity alias (created with {@link DoctrineUtils::getEntityAlias()})
+     *
+     * @param string $alias The Doctrine entity alias (from {@link DoctrineUtils::getEntityAlias()})
+     *
+     * @return string|null
+     */
+    public function decodeEntityAlias(string $alias)
+    {
+        foreach ($this->doctrine->getManagers() as $manager) {
+            foreach ($manager->getMetadataFactory()->getAllMetadata() as $metadata) {
+                if ($alias === self::getEntityAlias($metadata->getReflectionClass()->getName())) {
+                    return $metadata->getReflectionClass()->getName();
+                }
+            }
+        }
+
+        return null;
+    }
 }

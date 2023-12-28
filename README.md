@@ -75,6 +75,12 @@ Compute a query results count
 $utils->getQueryResultCount($queryBuilder);
 ```
 
+Get the readable alias for the doctrine entity
+```php
+$this->getEntityAlias(FooBundle\Entity\Bar\Baz::class); // 'foo.bar.baz'
+$this->decodeEntityAlias('foo.bar.baz'); // 'FooBundle\Entity\Bar\Baz::class'
+```
+
 ## Routing
 Forwards to another URI.  
 Like *Symfony\Bundle\FrameworkBundle\Controller\Controller::forward*, but using URI.
