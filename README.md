@@ -70,9 +70,9 @@ Determine if the object or FQCN is a Doctrine entity (under Doctrine control) or
 $utils->isEntity($entity);
 ```
 
-Compute a QueryBuilder results count
+Compute a query results count
 ```php
-$utils->resultCount($queryBuilder);
+$utils->getQueryResultCount($queryBuilder);
 ```
 
 ## Routing

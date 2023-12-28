@@ -123,13 +123,13 @@ class DoctrineUtils
     }
 
     /**
-     * Compute a QueryBuilder results count
+     * Compute a query results count
      *
      * @param QueryBuilder $queryBuilder
      *
      * @return int|mixed|string
      */
-    public function resultCount(QueryBuilder $queryBuilder)
+    public function getQueryResultCount(QueryBuilder $queryBuilder)
     {
         $queryBuilderCount = clone $queryBuilder;
 
