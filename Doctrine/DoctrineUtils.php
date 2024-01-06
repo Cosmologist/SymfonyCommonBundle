@@ -61,6 +61,12 @@ class DoctrineUtils
     }
 
     /**
+     * Get the target class name of the given association path (ie "contact.user") recursively
+     *
+     * <code>
+     * $doctrineUtils->getAssociationTargetClassRecursive('AppBundle/Entity/Company', 'contact.user'); // 'AppBundle/Entity/User'
+     * </code>
+     *
      * @param object|string $entity The entity object or FQCN
      * @param string        $path   The association path, ie "contact.user"
      *
@@ -71,13 +77,13 @@ class DoctrineUtils
         /** @var ClassMetadataInfo $metadata */
         $metadata = $this->getClassMetadata($entity);
 
-        if (StringType::contains($path, '.')) {
-            list($current, $left) = explode('.', $path, 2);
-
-            return $this->getAssociationTargetClassRecursive($metadata->getAssociationTargetClass($current), $left);
+        if (!StringType::contains($path, '.')) {
+            return $metadata->getAssociationTargetClass($path);
         }
 
-        return $metadata->getAssociationTargetClass($path);
+        list($current, $left) = explode('.', $path, 2);
+
+        return $this->getAssociationTargetClassRecursive($metadata->getAssociationTargetClass($current), $left);
     }
 
     /**
@@ -210,5 +216,45 @@ class DoctrineUtils
         }
 
         return null;
+    }
+
+    /**
+     * Perform recursively join operation of the given association path (ie "contact.user.type")
+     *
+     * <code>
+     * $qb = $entityManager->getRepository(Company::class)->createQueryBuilder('company');
+     *
+     * # Recursive joins
+     * DoctrineUtils::joinRecursive($qb, 'contact.user.type'); // ["user", "type"]
+     * // equivalent to
+     * $qb
+     *   ->join('company.contact', 'contact')
+     *   ->join('contact.user', 'user')
+     *   ->join('user.type', 'type');
+     *
+     * # Join doesn't required
+     * DoctrineUtils::joinRecursive($qb, 'contact'); // ["company", "contact"]
+     * </code>
+     *
+     * Attention: method doesn't care about alias uniqueness or join doubling
+     *
+     * @param QueryBuilder $queryBuilder
+     * @param string       $path
+     * @param string|null  $joinToAlias
+     *
+     * @return array<string, string> Touple of the last relationship alias to join and the alias of the join.
+     */
+    public static function joinRecursive(QueryBuilder $queryBuilder, string $path, string $joinToAlias = null)
+    {
+        $joinToAlias = $joinToAlias ?? current($queryBuilder->getRootAliases());
+
+        if (!StringType::contains($path, '.')) {
+            return [$joinToAlias, $path];
+        }
+
+        list($current, $left) = explode('.', $path, 2);
+        $queryBuilder->join(sprintf('%s.%s', $joinToAlias, $current), $current);
+
+        return self::joinRecursive($queryBuilder, $left, $current);
     }
 }

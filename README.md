@@ -55,6 +55,11 @@ $utils->getClassMetadata($entity);
 $utils->getClassMetadata(Entity::class);
 ```
 
+Get the target class name of the given association path (ie "contact.user") recursively
+```php
+$doctrineUtils->getAssociationTargetClassRecursive('AppBundle/Entity/Company', 'contact.user'); // 'AppBundle/Entity/User'
+```
+
 Get entity identifier field name (does not support multiple identifiers - throws DoctrineUtilsException)
 ```php
 $utils->getEntitySingleIdentifierField($entity);
@@ -80,6 +85,24 @@ Get the readable alias for the doctrine entity
 $this->getEntityAlias(FooBundle\Entity\Bar\Baz::class); // 'foo.bar.baz'
 $this->decodeEntityAlias('foo.bar.baz'); // 'FooBundle\Entity\Bar\Baz'
 ```
+
+Perform recursively join operation of the given association path (ie "contact.user.type")
+```php
+$qb = $entityManager->getRepository(Company::class)->createQueryBuilder('company');
+
+# Recursive joins
+DoctrineUtils::joinRecursive($qb, 'contact.user.type'); // ["user", "type"]
+// equivalent to
+$qb
+  ->join('company.contact', 'contact')
+  ->join('contact.user', 'user')
+  ->join('user.type', 'type');
+
+# Join doesn't required
+DoctrineUtils::joinRecursive($qb, 'contact'); // ["company", "contact"]
+```
+> **Attention**: method doesn't care about alias uniqueness or join doubling
+
 
 ## Routing
 Forwards to another URI.  
