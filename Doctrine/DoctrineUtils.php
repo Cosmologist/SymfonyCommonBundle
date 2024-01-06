@@ -4,9 +4,11 @@ namespace Cosmologist\Bundle\SymfonyCommonBundle\Doctrine;
 
 use Cosmologist\Bundle\SymfonyCommonBundle\Exception\DoctrineUtilsException;
 use Cosmologist\Gears\ObjectType;
+use Cosmologist\Gears\StringType;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Util\ClassUtils;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\QueryBuilder;
 
 class DoctrineUtils
@@ -31,7 +33,7 @@ class DoctrineUtils
     /**
      * Get entity real class
      *
-     * @param string|object $target FQCN or object
+     * @param string|object $target The entity object or FQCN
      *
      * @return string FQCN
      */
@@ -43,7 +45,7 @@ class DoctrineUtils
     /**
      * Get doctrine class metadata
      *
-     * @param object|string $entity Entity object or FQCN
+     * @param object|string $entity The entity object or FQCN
      *
      * @return ClassMetadata|null
      */
@@ -59,15 +61,35 @@ class DoctrineUtils
     }
 
     /**
+     * @param object|string $entity The entity object or FQCN
+     * @param string        $path   The association path, ie "contact.user"
+     *
+     * @return string
+     */
+    public function getAssociationTargetClassRecursive($entity, string $path)
+    {
+        /** @var ClassMetadataInfo $metadata */
+        $metadata = $this->getClassMetadata($entity);
+
+        if (StringType::contains($path, '.')) {
+            list($current, $left) = explode('.', $path, 2);
+
+            return $this->getAssociationTargetClassRecursive($metadata->getAssociationTargetClass($current), $left);
+        }
+
+        return $metadata->getAssociationTargetClass($path);
+    }
+
+    /**
+     * @param object|string $entity Entity object or FQCN
+     *
+     * @return mixed
      * @deprecated Use UnitOfWork::getEntityIdentifier instead
      *
      * Get entity identifier field
      *
      * If entity implements multiple identifiers then throw exception
      *
-     * @param object|string $entity Entity object or FQCN
-     *
-     * @return mixed
      */
     public function getEntitySingleIdentifierField($entity)
     {
@@ -104,7 +126,7 @@ class DoctrineUtils
         $identifiers = $metadata->getIdentifierValues($entity);
 
         if (count($identifiers) !== 1) {
-             throw DoctrineUtilsException::unsupportedPrimaryKey($metadata->getName());
+            throw DoctrineUtilsException::unsupportedPrimaryKey($metadata->getName());
         }
 
         return current($identifiers);
