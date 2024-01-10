@@ -4,3 +4,7 @@ services:
     class: Cosmologist\Bundle\SymfonyCommonBundle\Security\Voter\SuperUserRoleVoter
     tags:
      - { name: security.voter }
+
+  symfony_common.security.utils:
+    class: Cosmologist\Bundle\SymfonyCommonBundle\Security\SecurityUtils
+    autowire: true
