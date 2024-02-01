@@ -116,6 +116,12 @@ $utils->forwardToUri('https://myshop.com/products/programmers-t-shirts');
 ```
 
 ## Security
+
+### Command for interactive setup ACLs and ACEs
+```shell script
+bin/console symfony-common:acl:set
+```
+
 ### ROLE_SUPER_USER
 *Cosmologist\Bundle\SymfonyCommonBundle\Security\Voter\SuperUserRoleVoter* adds a special role "ROLE_SUPER_USER" which effectively bypasses any, and all security checks.
 
