@@ -75,11 +75,6 @@ Determine if the object or FQCN is a Doctrine entity (under Doctrine control) or
 $utils->isEntity($entity);
 ```
 
-Compute a query results count
-```php
-$utils->getQueryResultCount($queryBuilder);
-```
-
 Get the readable alias for the doctrine entity
 ```php
 $this->getEntityAlias(FooBundle\Entity\Bar\Baz::class); // 'foo.bar.baz'

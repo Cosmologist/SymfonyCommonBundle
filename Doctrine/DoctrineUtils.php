@@ -151,32 +151,6 @@ class DoctrineUtils
     }
 
     /**
-     * Compute a query results count
-     *
-     * @param QueryBuilder $queryBuilder
-     *
-     * @return int|mixed|string
-     */
-    public function getQueryResultCount(QueryBuilder $queryBuilder)
-    {
-        $queryBuilderCount = clone $queryBuilder;
-
-        if ($queryBuilderCount->getDQLPart('orderBy')) {
-            $queryBuilderCount->resetDQLPart('orderBy');
-        }
-
-        $fromEntity = current($queryBuilderCount->getDQLPart('from'))->getFrom();
-
-        $queryBuilderCount->select(sprintf(
-            'count(DISTINCT %s.%s) as cnt',
-            current($queryBuilderCount->getRootAliases()),
-            $this->getEntitySingleIdentifierField($fromEntity)
-        ));
-
-        return $queryBuilderCount->getQuery()->getSingleScalarResult();
-    }
-
-    /**
      * Get the readable alias for the doctrine entity
      *
      * <strong>Example:</strong>
