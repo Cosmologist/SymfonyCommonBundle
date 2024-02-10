@@ -215,6 +215,18 @@ ContainerStatic::getParameter('parameter_id');
 ```
 
 ## Twig
+
+### Pagination template (Bootstrap friendly)
+```twig
+{% include '@SymfonyCommon/pagination.html.twig' with { page: current_page, count: items_total, limit: items_per_page } %}
+
+{# Parameters:
+   * page (int) : The current page you are in
+   * limit (int): Number of records to display per page
+   * count (int): Total count of records
+   * currentFilters (array)(optional) : associative array that contains route-arguments #}
+```
+
 ### Inject any callable to the Twig
 ```yaml
 # app/config/config.yml
