@@ -1,14 +1,13 @@
 services:
 
-  symfony_common.twig.common_extension:
-      class: Cosmologist\Bundle\SymfonyCommonBundle\Twig\CommonExtension
-      tags:
-          - { name: twig.extension }
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
 
-  symfony_common.twig.php_extension:
-      class: Cosmologist\Bundle\SymfonyCommonBundle\Twig\PhpExtension
-      arguments:
-        - '%symfony_common.twig.php_extension.functions%'
-        - '%symfony_common.twig.php_extension.filters%'
-      tags:
-          - { name: twig.extension }
+  Cosmologist\Bundle\SymfonyCommonBundle\Twig\CommonExtension:
+
+  Cosmologist\Bundle\SymfonyCommonBundle\Twig\PhpExtension:
+    arguments:
+      - '%symfony_common.twig.php_extension.functions%'
+      - '%symfony_common.twig.php_extension.filters%'

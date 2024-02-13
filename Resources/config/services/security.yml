@@ -1,10 +1,9 @@
 services:
 
-  symfony_common.security.voter.super_user_role:
-    class: Cosmologist\Bundle\SymfonyCommonBundle\Security\Voter\SuperUserRoleVoter
-    tags:
-     - { name: security.voter }
-
-  symfony_common.security.utils:
-    class: Cosmologist\Bundle\SymfonyCommonBundle\Security\SecurityUtils
+  _defaults:
     autowire: true
+    autoconfigure: true
+    public: false
+
+  Cosmologist\Bundle\SymfonyCommonBundle\Security\Voter\SuperUserRoleVoter:
+  Cosmologist\Bundle\SymfonyCommonBundle\Security\SecurityUtils:

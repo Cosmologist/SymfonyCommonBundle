@@ -1,4 +1,8 @@
 services:
 
-  symfony_common.monolog.fingers_crossed.ignore_http_not_found_activation_strategy:
-    class: Cosmologist\Bundle\SymfonyCommonBundle\Monolog\FingersCrossed\IgnoreHttpNotFoundActivationStrategy
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Cosmologist\Bundle\SymfonyCommonBundle\Monolog\FingersCrossed\IgnoreHttpNotFoundActivationStrategy:

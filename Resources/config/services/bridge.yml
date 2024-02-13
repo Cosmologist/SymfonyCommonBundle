@@ -1,16 +1,9 @@
 services:
 
-  symfony_common.service_bridge:
-    class: Cosmologist\Bundle\SymfonyCommonBundle\Bridge\ServiceBridge
-    arguments:
-      - '@service_container'
-      - '@doctrine'
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
 
-  symfony_common.controller.service_bridge_controller:
-      class: Cosmologist\Bundle\SymfonyCommonBundle\Controller\ServiceBridgeController
-      arguments:
-        - '@symfony_common.service_bridge'
-        - '@doctrine'
-
-  # BC
-  symfony_common.controller.service_controller: '@symfony_common.controller.service_bridge_controller'
+  Cosmologist\Bundle\SymfonyCommonBundle\Bridge\ServiceBridge:
+  Cosmologist\Bundle\SymfonyCommonBundle\Controller\ServiceBridgeController:

@@ -1,6 +1,8 @@
 services:
 
-  symfony_common.routing.utils:
-    class: Cosmologist\Bundle\SymfonyCommonBundle\RoutingUtils
-    arguments:
-      - '@http_kernel'
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Cosmologist\Bundle\SymfonyCommonBundle\RoutingUtils:

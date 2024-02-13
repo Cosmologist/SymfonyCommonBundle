@@ -1,6 +1,8 @@
 services:
 
-  symfony_common.doctrine.utils:
-    class: Cosmologist\Bundle\SymfonyCommonBundle\Doctrine\DoctrineUtils
-    arguments:
-      - '@doctrine'
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Cosmologist\Bundle\SymfonyCommonBundle\Doctrine\DoctrineUtils:
