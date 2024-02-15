@@ -2,7 +2,7 @@
 
 namespace Cosmologist\Bundle\SymfonyCommonBundle\Bridge;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Persistence\ManagerRegistry;
 use InvalidArgumentException;
 use ReflectionException;
 use ReflectionMethod;
@@ -26,27 +26,26 @@ class ServiceBridge
     /**
      * Doctrine registry
      *
-     * @var Registry
+     * @var ManagerRegistry
      */
-    private $registry;
+    private $doctrine;
 
     /**
-     * ServiceBridgeController constructor.
-     *
      * @param ContainerInterface $container Service container
-     * @param Registry           $registry  Doctrine registry
+     * @param ManagerRegistry    $doctrine  Doctrine registry
      */
-    public function __construct(ContainerInterface $container, Registry $registry)
+    public function __construct(ContainerInterface $container, ManagerRegistry $doctrine)
     {
         $this->container = $container;
-        $this->registry  = $registry;
+        $this->doctrine  = $doctrine;
     }
 
 
     /**
      * @param string $service
      * @param string $method
-     * @param array $args
+     * @param array  $args
+     *
      * @return mixed
      *
      * @throws ServiceNotFoundException If service does not exist
@@ -69,7 +68,7 @@ class ServiceBridge
             }
 
             if (null !== $parameterClass = $parameter->getClass()) {
-                if (null === $entityManager = $this->registry->getManagerForClass($parameterClass->getName())) {
+                if (null === $entityManager = $this->doctrine->getManagerForClass($parameterClass->getName())) {
                     throw new InvalidArgumentException("Unsupported argument '$name'");
                 }
 

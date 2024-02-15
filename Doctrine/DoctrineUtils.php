@@ -5,27 +5,25 @@ namespace Cosmologist\Bundle\SymfonyCommonBundle\Doctrine;
 use Cosmologist\Bundle\SymfonyCommonBundle\Exception\DoctrineUtilsException;
 use Cosmologist\Gears\ObjectType;
 use Cosmologist\Gears\StringType;
-use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
 class DoctrineUtils
 {
     /**
      * Doctrine
      *
-     * @var Registry
+     * @var ManagerRegistry
      */
     private $doctrine;
 
     /**
-     * CommonUtils constructor.
-     *
-     * @param Registry $doctrine Doctrine
+     * @param ManagerRegistry $doctrine Doctrine
      */
-    public function __construct(Registry $doctrine)
+    public function __construct(ManagerRegistry $doctrine)
     {
         $this->doctrine = $doctrine;
     }
