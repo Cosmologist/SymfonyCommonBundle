@@ -10,12 +10,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
  */
 class SuperUserRoleVoter implements VoterInterface
 {
-    /**
-     * SuperAdmin Role
-     *
-     * @var string
-     */
-    static $ROLE_SUPER_ADMIN = 'ROLE_SUPER_USER';
+    public const ROLE_SUPER_USER = 'ROLE_SUPER_USER';
 
     /**
      * {@inheritdoc}
@@ -25,10 +20,15 @@ class SuperUserRoleVoter implements VoterInterface
         return $this->hasSuperUserRole($token) ? VoterInterface::ACCESS_GRANTED : VoterInterface::ACCESS_ABSTAIN;
     }
 
+    /**
+     * @param TokenInterface $token
+     *
+     * @return bool
+     */
     protected function hasSuperUserRole(TokenInterface $token)
     {
         foreach ($token->getRoles() as $role) {
-            if ($role->getRole() === self::$ROLE_SUPER_ADMIN) {
+            if ($role->getRole() === self::ROLE_SUPER_USER) {
                 return true;
             }
         }
