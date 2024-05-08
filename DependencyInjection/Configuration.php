@@ -30,8 +30,8 @@ class Configuration implements ConfigurationInterface
             return $normalized;
         };
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode    = $treeBuilder->root('symfony_common');
+        $treeBuilder = new TreeBuilder('symfony_common');
+        $rootNode    = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()
@@ -60,8 +60,10 @@ class Configuration implements ConfigurationInterface
                 ->end()
 
                 ->arrayNode('twig')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->arrayNode('php_extension')
+                            ->addDefaultsIfNotSet()
                             ->children()
                                 ->arrayNode('filters')
                                     ->beforeNormalization()
