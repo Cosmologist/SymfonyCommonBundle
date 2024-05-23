@@ -27,6 +27,13 @@ class SuperUserRoleVoter implements VoterInterface
      */
     protected function hasSuperUserRole(TokenInterface $token)
     {
+        // Symfony 5+
+        if (method_exists($token, 'getRoleNames')) {
+            return in_array(self::ROLE_SUPER_USER, $token->getRoleNames());
+        }
+
+        // DEPRECATED
+        // Symfony old versions
         foreach ($token->getRoles() as $role) {
             if ($role->getRole() === self::ROLE_SUPER_USER) {
                 return true;
