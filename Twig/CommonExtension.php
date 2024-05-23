@@ -2,10 +2,10 @@
 
 namespace Cosmologist\Bundle\SymfonyCommonBundle\Twig;
 
-use Twig_Extension;
-use Twig_SimpleFilter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-class CommonExtension extends Twig_Extension
+class CommonExtension extends AbstractExtension
 {
     /**
      * * {@inheritdoc}
@@ -13,8 +13,8 @@ class CommonExtension extends Twig_Extension
     public function getFilters()
     {
         return [
-            new Twig_SimpleFilter('ceil', 'ceil'), // required by pagination.html.twig
-            new Twig_SimpleFilter('htmlAttributes', [$this, 'mapToHtmlAttributes'], ['is_safe' => ['html']])
+            new TwigFilter('ceil', 'ceil'), // required by pagination.html.twig
+            new TwigFilter('htmlAttributes', [$this, 'mapToHtmlAttributes'], ['is_safe' => ['html']])
         ];
     }
 
