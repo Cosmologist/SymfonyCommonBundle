@@ -35,7 +35,7 @@
 
 {% if limit is defined and limit != null and page is defined and page != null %}
     {% if currentFilters is not defined %}
-        {% set currentFilters = app.request.attributes.get('_route_params') | merge(app.request.query.all('_route_params')) %}
+        {% set currentFilters = app.request.attributes.get('_route_params') | merge(app.request.query.all()) %}
     {% endif %}
     {# paginationPath (string) : the route name to use for links #}
     {% set paginationPath = app.request.get('_route') %}
