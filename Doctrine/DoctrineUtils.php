@@ -5,9 +5,11 @@ namespace Cosmologist\Bundle\SymfonyCommonBundle\Doctrine;
 use Cosmologist\Bundle\SymfonyCommonBundle\Exception\DoctrineUtilsException;
 use Cosmologist\Gears\ObjectType;
 use Cosmologist\Gears\StringType;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -191,42 +193,130 @@ class DoctrineUtils
     }
 
     /**
-     * Perform recursively join operation of the given association path (ie "contact.user.type")
+     * Add a join to the query with a support of nested join (ie "contact.user.type")
      *
      * <code>
      * $qb = $entityManager->getRepository(Company::class)->createQueryBuilder('company');
      *
-     * # Recursive joins
-     * DoctrineUtils::joinRecursive($qb, 'contact.user.type'); // ["user", "type"]
+     * DoctrineUtils::joinRecursive($qb, 'contact.user.type');
      * // equivalent to
      * $qb
      *   ->join('company.contact', 'contact')
      *   ->join('contact.user', 'user')
      *   ->join('user.type', 'type');
-     *
-     * # Join doesn't required
-     * DoctrineUtils::joinRecursive($qb, 'contact'); // ["company", "contact"]
      * </code>
      *
-     * Attention: method doesn't care about alias uniqueness or join doubling
+     * Attention: method doesn't care about alias uniqueness
      *
      * @param QueryBuilder $queryBuilder
-     * @param string       $path
-     * @param string|null  $joinToAlias
-     *
-     * @return array<string, string> Touple of the last relationship alias to join and the alias of the join.
+     * @param string       $join
      */
-    public static function joinRecursive(QueryBuilder $queryBuilder, string $path, string $joinToAlias = null)
+    public static function joinRecursive(QueryBuilder $queryBuilder, string $join, string $joinTo = null)
     {
-        $joinToAlias = $joinToAlias ?? current($queryBuilder->getRootAliases());
-
-        if (!StringType::contains($path, '.')) {
-            return [$joinToAlias, $path];
+        // Join doesn't required
+        if (!StringType::contains($join, '.')) {
+            return;
         }
 
-        list($current, $left) = explode('.', $path, 2);
-        $queryBuilder->join(sprintf('%s.%s', $joinToAlias, $current), $current);
+        $joinTo = $joinToAlias ?? current($queryBuilder->getRootAliases());
 
-        return self::joinRecursive($queryBuilder, $left, $current);
+        [$current, $left] = explode('.', $join, 2);
+        $joinCurrent = sprintf('%s.%s', $joinTo, $current);
+
+        $joinCurrentAlias = self::joinOnce($queryBuilder, $joinCurrent, $current);
+
+        return self::joinRecursive($queryBuilder, $left, $joinCurrentAlias);
+    }
+
+    /**
+     * Add a join to the query once
+     *
+     * <code>
+     * // Adds join and returns an alias of added join
+     * DoctrineUtils::joinOnce($qb, 'contact.user', 'u1'); // "u1"
+     *
+     * // If a join with specified parameters exists then only returns an alias of existed join
+     * DoctrineUtils::joinOnce($qb, 'contact.user', 'u2'); // "u1"
+     * </code>
+     *
+     * See arguments description at the {@link QueryBuilder::add()}.
+     *
+     * @param QueryBuilder $queryBuilder
+     * @param string       $join
+     * @param string       $alias
+     * @param string|null  $conditionType
+     * @param string|null  $condition
+     * @param string|null  $indexBy
+     *
+     * @return string Alias of existed join or $alias
+     */
+    public static function joinOnce(QueryBuilder $queryBuilder, string $join, string $alias, string $conditionType = null, string $condition = null, string $indexBy = null): string
+    {
+        if (null !== $existedJoinAlias = self::getJoinAlias($queryBuilder, $join, $conditionType, $condition, $indexBy)) {
+            return $existedJoinAlias;
+        }
+
+        $queryBuilder->join($join, $alias, $conditionType, $condition, $indexBy);
+
+        return $alias;
+    }
+
+    /**
+     * Return alias of a join with specified parameters if exists
+     *
+     * See arguments description at the {@link QueryBuilder::add()}.
+     *
+     * @param QueryBuilder $queryBuilder
+     * @param string       $join
+     * @param string|null  $conditionType
+     * @param string|null  $condition
+     * @param string|null  $indexBy
+     *
+     * @return string|null
+     */
+    private static function getJoinAlias(QueryBuilder $queryBuilder, string $join, string $conditionType = null, string $condition = null, string $indexBy = null): ?string
+    {
+        $joinTo = StringType::strBefore($join, '.');
+
+        foreach ($queryBuilder->getDQLPart('join') as $dqlJoinsTo => $dqlJoins) {
+            if ($dqlJoinsTo === $joinTo) {
+                /** @var Join $dqlJoin */
+                foreach ($dqlJoins as $dqlJoin) {
+                    $joinTypeEqual      = $dqlJoin->getJoinType() === Join::INNER_JOIN;
+                    $joinEqual          = $dqlJoin->getJoin() === $join;
+                    $conditionTypeEqual = $dqlJoin->getConditionType() === $conditionType;
+                    $conditionEqual     = $dqlJoin->getCondition() == $condition;
+                    $indexByEqual       = $dqlJoin->getIndexBy() === $indexBy;
+
+                    if ($joinTypeEqual && $joinEqual && $conditionTypeEqual && $conditionEqual && $indexByEqual) {
+                        return $dqlJoin->getAlias();
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Merge multiple Doctrine\Common\Collections\Criteria into a one Doctrine\Common\Collections\Criteria
+     *
+     * @param Criteria $firstCriteria
+     * @param Criteria $secondCriteria
+     * @param Criteria ...$oneOrMoreCriteria
+     *
+     * @return Criteria
+     */
+    public static function mergeCriteria(Criteria $firstCriteria, Criteria $secondCriteria, Criteria ...$oneOrMoreCriteria): Criteria
+    {
+        array_unshift($oneOrMoreCriteria, $firstCriteria, $secondCriteria);
+
+        $resultCriteria = new Criteria();
+
+        foreach ($oneOrMoreCriteria as $criteria) {
+            $resultCriteria->andWhere($criteria->getWhereExpression());
+        }
+
+        return $resultCriteria;
     }
 }

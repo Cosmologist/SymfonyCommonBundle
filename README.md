@@ -86,18 +86,27 @@ Perform recursively join operation of the given association path (ie "contact.us
 $qb = $entityManager->getRepository(Company::class)->createQueryBuilder('company');
 
 # Recursive joins
-DoctrineUtils::joinRecursive($qb, 'contact.user.type'); // ["user", "type"]
+DoctrineUtils::joinRecursive($qb, 'contact.user.type');
 // equivalent to
 $qb
   ->join('company.contact', 'contact')
   ->join('contact.user', 'user')
   ->join('user.type', 'type');
-
-# Join doesn't required
-DoctrineUtils::joinRecursive($qb, 'contact'); // ["company", "contact"]
 ```
-> **Attention**: method doesn't care about alias uniqueness or join doubling
+> **Attention**: method doesn't care about alias uniqueness
+>
+Add a join to the query once
+```php
+// Adds join and returns an alias of added join
+DoctrineUtils::joinOnce($qb, 'contact.user', 'u1'); // "u1"
 
+// If a join with specified parameters exists then only returns an alias of existed join 
+DoctrineUtils::joinOnce($qb, 'contact.user', 'u2'); // "u1"
+````
+Merge multiple `Doctrine\Common\Collections\Criteria` into a one `Doctrine\Common\Collections\Criteria`
+```php
+$resultCriteria = DoctrineUtils::mergeCriteria($firstCriteria, $secondCriteria); 
+```
 
 ## Routing
 Forwards to another URI.  
