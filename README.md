@@ -129,6 +129,14 @@ bin/console symfony-common:acl:set
 ### ROLE_SUPER_USER
 *Cosmologist\Bundle\SymfonyCommonBundle\Security\Voter\SuperUserRoleVoter* adds a special role "ROLE_SUPER_USER" which effectively bypasses any, and all security checks.
 
+### The service Crypto
+The service `Crypto` provides functions for the _simple symmetric encryption_.  
+The _framework.secret_ used as a key to encryption.
+```php
+$crypto = $container->get(Cosmologist\Bundle\SymfonyCommonBundle\Security\Crypto::class);
+$crypto->decrypt($crypto->encrypt('The sensitive string')); // 'The sensitive string'
+```
+
 ## Dependency Injection
 
 ### Convenient way to get a Reference to a Doctrine DBAL connection
