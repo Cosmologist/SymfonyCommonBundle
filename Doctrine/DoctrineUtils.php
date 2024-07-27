@@ -7,8 +7,9 @@ use Cosmologist\Gears\ObjectType;
 use Cosmologist\Gears\StringType;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Doctrine\Common\Util\ClassUtils;
+use Doctrine\Common\Util\ClasUtils;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Proxy\DefaultProxyClassNameResolver;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -39,7 +40,12 @@ class DoctrineUtils
      */
     public function getRealClass($target)
     {
-        return ClassUtils::getRealClass(ObjectType::toClassName($target));
+        // Old versions of Doctrine
+        if (class_exists(ClassUtils::class)) {
+            return ClassUtils::getRealClass(ObjectType::toClassName($target));
+        }
+
+        return (new DefaultProxyClassNameResolver())->resolveClassName(ObjectType::toClassName($target));
     }
 
     /**
