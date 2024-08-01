@@ -32,13 +32,13 @@ class DoctrineUtils
     }
 
     /**
-     * Get entity real class
+     * Get real class of Doctrine entity (resolve entity proxy class)
      *
      * @param string|object $target The entity object or FQCN
      *
      * @return string FQCN
      */
-    public function getRealClass($target)
+    public static function getRealClass($target)
     {
         // Old versions of Doctrine
         if (class_exists(ClassUtils::class)) {
@@ -57,7 +57,7 @@ class DoctrineUtils
      */
     public function getClassMetadata($entity)
     {
-        $fqcn = $this->getRealClass($entity);
+        $fqcn = self::getRealClass($entity);
 
         if (null === $entityManager = $this->doctrine->getManagerForClass($fqcn)) {
             return null;
@@ -153,7 +153,7 @@ class DoctrineUtils
      */
     public function isEntity($entity)
     {
-        return null !== $this->doctrine->getManagerForClass($this->getRealClass($entity));
+        return null !== $this->doctrine->getManagerForClass(self::getRealClass($entity));
     }
 
     /**

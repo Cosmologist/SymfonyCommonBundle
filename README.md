@@ -46,7 +46,17 @@ $connection->fetchAllIndexed('SELECT id, name FROM users');
 ### Doctrine Utils
 Get Doctrine utils
 ```php
+$utils = $container->get(Cosmologist\Bundle\SymfonyCommonBundle\Doctrine\DoctrineUtils::class);
+// or
 $utils = $container->get('symfony_common.doctrine.utils');
+```
+
+Get real class of Doctrine entity (resolve entity proxy class)  
+Supports Doctrine < 3.x and Doctrine > 3.x
+```php
+$entity = $entityManager->find(App\Entity\Foo::class, $identifier);
+DoctrineUtils::getRealClass($entity); \\ "App\Entity\Foo"
+DoctrineUtils::getRealClass(App\Entity\Foo::class); \\ "App\Entity\Foo"
 ```
 
 Simple way to get doctrine entity metadata
