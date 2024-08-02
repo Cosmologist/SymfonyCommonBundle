@@ -6,9 +6,8 @@ use Cosmologist\Bundle\SymfonyCommonBundle\Exception\DoctrineUtilsException;
 use Cosmologist\Gears\ObjectType;
 use Cosmologist\Gears\StringType;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Util\ClasUtils;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Proxy\DefaultProxyClassNameResolver;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -80,7 +79,7 @@ class DoctrineUtils
      */
     public function getAssociationTargetClassRecursive($entity, string $path)
     {
-        /** @var ClassMetadataInfo $metadata */
+        /** @var ClassMetadata $metadata */
         $metadata = $this->getClassMetadata($entity);
 
         if (!StringType::contains($path, '.')) {
