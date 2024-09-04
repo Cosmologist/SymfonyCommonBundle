@@ -74,7 +74,7 @@ class DependencyInjectionUtils
      */
     public static function getDoctrineDbalConnectionReference(string $name): Reference
     {
-        return new Reference("doctrine.dbal.${name}_connection");
+        return new Reference("doctrine.dbal.{$name}_connection");
     }
 
     /**
@@ -86,6 +86,6 @@ class DependencyInjectionUtils
      */
     public static function getDoctrineOrmEntityManagerReference(string $name): Reference
     {
-        return new Reference("doctrine.orm.${name}_entity_manager");
+        return new Reference("doctrine.orm.{$name}_entity_manager");
     }
 }
