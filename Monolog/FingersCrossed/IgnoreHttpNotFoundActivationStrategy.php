@@ -4,6 +4,7 @@ namespace Cosmologist\Bundle\SymfonyCommonBundle\Monolog\FingersCrossed;
 
 use Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy;
 use Monolog\Logger;
+use Monolog\LogRecord;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -31,7 +32,7 @@ class IgnoreHttpNotFoundActivationStrategy extends ErrorLevelActivationStrategy
     /**
      * {@inheritdoc}
      */
-    public function isHandlerActivated(array $record): bool
+    public function isHandlerActivated(LogRecord $record): bool
     {
         $isActivated = parent::isHandlerActivated($record);
 
