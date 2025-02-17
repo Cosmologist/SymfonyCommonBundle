@@ -24,7 +24,7 @@ class PresetFunctionProvider implements ExpressionFunctionProviderInterface
     /**
      * {@inheritDoc}
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return array_map([ExpressionFunction::class, 'fromPhp'], $this->functions);
     }
