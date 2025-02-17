@@ -36,13 +36,15 @@ class RunnerCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         [$class, $method] = $this->parseClassAndMethod(token_get_all(file_get_contents($input->getArgument('file'))), $input->getArgument('line'));
 
         $result = call_user_func_array(CallableType::toCallable("$class::$method"), []);
 
         var_dump($result);
+
+        return 0;
     }
 
     /**
